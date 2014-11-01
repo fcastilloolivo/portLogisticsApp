@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>jQuery Mobile Demos</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="css/themes/default/jquery.mobile-1.4.4.min.css">
+    <link rel="stylesheet" href="_assets/css/jqm-demos.css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+    <script src="js/jquery.js"></script>
+    <script src="_assets/js/index.js"></script>
+    <script src="js/jquery.mobile-1.4.4.min.js"></script>
+    <style id="combined-heading-and-section"> 
+    .custom-corners .ui-bar {
+      -webkit-border-top-left-radius: inherit;
+      border-top-left-radius: inherit;
+      -webkit-border-top-right-radius: inherit;
+      border-top-right-radius: inherit;
+    }
+    .custom-corners .ui-body {
+      border-top-width: 0;
+      -webkit-border-bottom-left-radius: inherit;
+      border-bottom-left-radius: inherit;
+      -webkit-border-bottom-right-radius: inherit;
+      border-bottom-right-radius: inherit;
+    }
+
+        .center-wrapper {
+      text-align: center;
+    }
+    .center-wrapper * {
+      margin: 0 auto;
+    }
+    .center-wrapper img {
+       vertical-align: middle;
+    }     
+    .center-wrapper span {
+       vertical-align: middle;
+       line-height: 30px;
+    }  
+
+
+    /* These apply across all breakpoints because they are outside of a media query */
+/* Make the labels light gray all caps across the board */
+.movie-list thead th,
+.movie-list tbody th .ui-table-cell-label,
+.movie-list tbody td .ui-table-cell-label {
+    text-transform: uppercase;
+    font-size: .1 em;
+    color: rgba(0,0,0,0.5);
+    /*font-weight: normal;*/
+}
+/* White bg, large blue text for rank and title */
+/*.movie-list tbody th {
+    font-size: 1.2em;
+    background-color: #fff;
+    color: #77bbff;
+    text-align: center;
+}*/
+/*  Add a bit of extra left padding for the title */
+.movie-list tbody td.title {
+    padding-left: .8em;
+}
+/* Add strokes */
+.movie-list thead th {
+    border-bottom: 1px solid #d6d6d6; /* non-RGBA fallback */
+    border-bottom: 1px solid rgba(0,0,0,.1);
+}
+.movie-list tbody th,
+.movie-list tbody td {
+    border-bottom: 1px solid #e6e6e6; /* non-RGBA fallback  */
+    border-bottom: 1px solid rgba(0,0,0,.05);
+}
+/*  Custom stacked styles for mobile sizes */
+/*  Use a max-width media query so we don't have to undo these styles */
+@media (max-width: 40em) {
+    /*  Negate the margin between sections */
+    .movie-list tbody th {
+        margin-top: 0;
+        text-align: left;
+    }
+    /*  White bg, large blue text for rank and title */
+    .movie-list tbody th,
+    .movie-list tbody td.title {
+        display: block;
+        /*font-size: 1.2em;*/
+        line-height: 110%;
+        padding: .5em .5em;
+        background-color: #fff;
+        color: #22246b;
+        -moz-box-shadow: 0 1px 6px rgba(0,0,0,.1);
+        -webkit-box-shadow: 0 1px 6px rgba(0,0,0,.1);
+        box-shadow: 0 1px 6px rgba(0,0,0,.1);
+    }
+    /*  Hide labels for rank and title */
+    .movie-list tbody th .ui-table-cell-label,
+    .movie-list tbody td.title .ui-table-cell-label {
+        display: none;
+    }
+    /*  Position the title next to the rank, pad to the left */
+    .movie-list tbody td.title {
+        margin-top: -2.1em;
+        padding-left: 2.2em;
+        border-bottom: 1px solid rgba(0,0,0,.15);
+    }
+    /*  Make the data bold */
+    .movie-list th,
+    .movie-list td {
+        font-weight: bold;
+    }
+    /* Make the label elements a percentage width */
+    .movie-list td .ui-table-cell-label,
+    .movie-list th .ui-table-cell-label {
+        min-width: 20%;
+    }
+}
+/* Media query to show as a standard table at wider widths */
+@media ( min-width: 40em ) {
+    /* Show the table header rows */
+    .movie-list td,
+    .movie-list th,
+    .movie-list tbody th,
+    .movie-list tbody td,
+    .movie-list thead td,
+    .movie-list thead th {
+        display: table-cell;
+        margin: 0;
+    }
+    /* Hide the labels in each cell */
+    .movie-list td .ui-table-cell-label,
+    .movie-list th .ui-table-cell-label {
+        display: none;
+    }
+}
+/* Hack to make IE9 and WP7.5 treat cells like block level elements */
+/* Applied in a max-width media query up to the table layout breakpoint so we don't need to negate this */
+@media ( max-width: 40em ) {
+    .movie-list td,
+    .movie-list th {
+        width: 100%;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        float: left;
+        clear: left;
+    }
+}
+    </style>
+</head>
+<body>
+<div data-role="page" >
+     <div data-role="header" data-position="fixed" data-theme="a" >
+    <div class="center-wrapper">
+        <img width="40" height="43" alt="Header"
+             src="logoPrincipal.png" /> 
+          <span>Port Logistics - Dua</span>
+      </div>
+        <a href="pagDua1.html" class="ui-btn ui-icon-back ui-btn-icon-left">Atras</a>
+        <a href="#add-form" data-icon="gear" data-iconpos="notext">Add</a>
+    </div><!-- /header -->
+
+   <div role="main" class="ui-content" data-position="fixed">
+        <div class="ui-corner-all ui-shadow custom-corners" >
+          <div class="ui-bar ui-bar-a" style="background-color:#0E54A4;">
+           Detalles del Evento
+          </div>
+          <div class="ui-body ui-body-a">
+          <!--class="ui-body-d ui-shadow table-stripe ui-responsive" -->
+          <p value ="OPE_DUA_DOCUMENTOS_HISTORIAL.OBSERVACION">Observacion del evento 1</p>
+<table data-role="table" id="table-custom-2"  class="movie-list">
+    <thead>
+      <tr class="ui-bar-d">
+        <th value = "OPE_DUA_DOCUMENTOS_HISTORIAL.DOCUMENTO">Documento</th>
+        <th value = "OPE_DUA_DOCUMENTOS_HISTORIAL.SOLICITADO">Solicitado</th>
+        <th value = "OPE_DUA_DOCUMENTOS_HISTORIAL.ACCION">Accion</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>Factura Cliente</th>
+        <td>Cliente</td>
+        <td>Envio</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</div>
+<br>
+        <div class="ui-corner-all ui-shadow custom-corners" >
+          <div class="ui-bar ui-bar-a" style="background-color:#0E54A4;">
+           Archivos Adjuntos
+          </div>
+          <div class="ui-body ui-body-a">
+<ul data-role="listview" data-split-icon="gear" data-split-theme="a" data-inset="true">
+    <li><a href="#">
+        <img src="word.png">
+    <h2 value = "OPE_DUA_DOCUMENTOS_ATTACH.ARCHIVO">Documento 1</h2>
+        <a href="#purchase" data-rel="popup" data-position-to="window" data-transition="pop">Descargar</a>
+    </li>
+    <li><a href="#">
+        <img src="excel.png">
+    <h2 value = "OPE_DUA_DOCUMENTOS_ATTACH.ARCHIVO">Documento 2</h2>
+        <a href="#purchase" data-rel="popup" data-position-to="window" data-transition="pop">Descargar</a>
+    </li>
+</ul>
+</div>
+</div>
+
+</div>
+
+<div data-role="popup" id="purchase" data-theme="a" data-overlay-theme="b" class="ui-content" style="max-width:340px; padding-bottom:2em;">
+    <h3>Descargar Archivo</h3>
+<p>Esta seguro que desea descargar el archivo</p>
+    <a href="index.html" data-rel="back" class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-check ui-btn-icon-left ui-btn-inline ui-mini">Aceptar</a>
+    <a href="index.html" data-rel="back" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-mini">Cancelar</a>
+</div>
+
+<div data-role="panel" data-position="right" data-display="reveal" data-theme="b" id="add-form">
+    <ul data-role="listview" data-theme="b">
+      <!--<li><a href="pagDua.html">DUA</a></li>-->
+      <li><a href="pagTransporte.html">Transporte</a></li>
+      <li><a href="pagAdicionales.html">Adicionales</a></li>
+    </ul>
+</div><!-- /panel -->
+
+</body>
+</html>
