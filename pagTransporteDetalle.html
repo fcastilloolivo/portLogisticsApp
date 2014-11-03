@@ -1,209 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>jQuery Mobile Demos</title>
-    <link rel="shortcut icon" href="favicon.ico">
-    <link rel="stylesheet" href="css/themes/default/jquery.mobile-1.4.4.min.css">
-    <link rel="stylesheet" href="_assets/css/jqm-demos.css">
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+    <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.4.min.css">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
     <script src="js/jquery.js"></script>
-    <script src="_assets/js/index.js"></script>
     <script src="js/jquery.mobile-1.4.4.min.js"></script>
-      <style>
-    #map-page, #map-canvas { width: 100%; height: 100%; padding: 0; }
-  </style>
-      <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
-    <style id="combined-heading-and-section"> 
-    .custom-corners .ui-bar {
-      -webkit-border-top-left-radius: inherit;
-      border-top-left-radius: inherit;
-      -webkit-border-top-right-radius: inherit;
-      border-top-right-radius: inherit;
-    }
-    .custom-corners .ui-body {
-      border-top-width: 0;
-      -webkit-border-bottom-left-radius: inherit;
-      border-bottom-left-radius: inherit;
-      -webkit-border-bottom-right-radius: inherit;
-      border-bottom-right-radius: inherit;
-    }
-
-        .center-wrapper {
-      text-align: center;
-    }
-    .center-wrapper * {
-      margin: 0 auto;
-    }
-    .center-wrapper img {
-       vertical-align: middle;
-    }     
-    .center-wrapper span {
-       vertical-align: middle;
-       line-height: 30px;
-    }  
-
-
-    /* These apply across all breakpoints because they are outside of a media query */
-/* Make the labels light gray all caps across the board */
-.movie-list thead th,
-.movie-list tbody th .ui-table-cell-label,
-.movie-list tbody td .ui-table-cell-label {
-    text-transform: uppercase;
-    font-size: .1 em;
-    color: rgba(0,0,0,0.5);
-    /*font-weight: normal;*/
-}
-/* White bg, large blue text for rank and title */
-/*.movie-list tbody th {
-    font-size: 1.2em;
-    background-color: #fff;
-    color: #77bbff;
-    text-align: center;
-}*/
-/*  Add a bit of extra left padding for the title */
-.movie-list tbody td.title {
-    padding-left: .8em;
-}
-/* Add strokes */
-.movie-list thead th {
-    border-bottom: 1px solid #d6d6d6; /* non-RGBA fallback */
-    border-bottom: 1px solid rgba(0,0,0,.1);
-}
-.movie-list tbody th,
-.movie-list tbody td {
-    border-bottom: 1px solid #e6e6e6; /* non-RGBA fallback  */
-    border-bottom: 1px solid rgba(0,0,0,.05);
-}
-/*  Custom stacked styles for mobile sizes */
-/*  Use a max-width media query so we don't have to undo these styles */
-@media (max-width: 40em) {
-    /*  Negate the margin between sections */
-    .movie-list tbody th {
-        margin-top: 0;
-        text-align: left;
-    }
-    /*  White bg, large blue text for rank and title */
-    .movie-list tbody th,
-    .movie-list tbody td.title {
-        display: block;
-        /*font-size: 1.2em;*/
-        line-height: 110%;
-        padding: .5em .5em;
-        background-color: #fff;
-        color: #22246b;
-        -moz-box-shadow: 0 1px 6px rgba(0,0,0,.1);
-        -webkit-box-shadow: 0 1px 6px rgba(0,0,0,.1);
-        box-shadow: 0 1px 6px rgba(0,0,0,.1);
-    }
-    /*  Hide labels for rank and title */
-    .movie-list tbody th .ui-table-cell-label,
-    .movie-list tbody td.title .ui-table-cell-label {
-        display: none;
-    }
-    /*  Position the title next to the rank, pad to the left */
-    .movie-list tbody td.title {
-        margin-top: -2.1em;
-        padding-left: 2.2em;
-        border-bottom: 1px solid rgba(0,0,0,.15);
-    }
-    /*  Make the data bold */
-    .movie-list th,
-    .movie-list td {
-        font-weight: bold;
-    }
-    /* Make the label elements a percentage width */
-    .movie-list td .ui-table-cell-label,
-    .movie-list th .ui-table-cell-label {
-        min-width: 20%;
-    }
-}
-/* Media query to show as a standard table at wider widths */
-@media ( min-width: 40em ) {
-    /* Show the table header rows */
-    .movie-list td,
-    .movie-list th,
-    .movie-list tbody th,
-    .movie-list tbody td,
-    .movie-list thead td,
-    .movie-list thead th {
-        display: table-cell;
-        margin: 0;
-    }
-    /* Hide the labels in each cell */
-    .movie-list td .ui-table-cell-label,
-    .movie-list th .ui-table-cell-label {
-        display: none;
-    }
-}
-/* Hack to make IE9 and WP7.5 treat cells like block level elements */
-/* Applied in a max-width media query up to the table layout breakpoint so we don't need to negate this */
-@media ( max-width: 40em ) {
-    .movie-list td,
-    .movie-list th {
-        width: 100%;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-        float: left;
-        clear: left;
-    }
-}
-
-
-    </style>
-
-<script>
-/*
- * Google Maps documentation: http://code.google.com/apis/maps/documentation/javascript/basics.html
- * Geolocation documentation: http://dev.w3.org/geo/api/spec-source.html
- */
-$( document ).on( "pagecreate", "#map-page", function() {
-    var defaultLatLng = new google.maps.LatLng(34.0983425, -118.3267434);  // Default to Hollywood, CA when no geolocation support
-    if ( navigator.geolocation ) {
-        function success(pos) {
-            // Location found, show map with these coordinates
-            drawMap(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
-        }
-        function fail(error) {
-            drawMap(defaultLatLng);  // Failed to find location, show default map
-        }
-        // Find the users current position.  Cache the location for 5 minutes, timeout after 6 seconds
-        navigator.geolocation.getCurrentPosition(success, fail, {maximumAge: 500000, enableHighAccuracy:true, timeout: 6000});
-    } else {
-        drawMap(defaultLatLng);  // No geolocation support, show default map
-    }
-    function drawMap(latlng) {
-        var myOptions = {
-            zoom: 10,
-            center: latlng,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
-        // Add an overlay to the map of current lat/lng
-        var marker = new google.maps.Marker({
-            position: latlng,
-            map: map,
-            title: "Greetings!"
-        });
-    }
-});
- </script>   
 </head>
 <body>
-<div data-role="page" id="map-page">
+<div data-role="page" id="pagTransporteDetalle" data-url="pagTransporteDetalle">
      <div data-role="header" data-position="fixed" data-theme="a" >
     <div class="center-wrapper">
         <img width="40" height="43" alt="Header"
-             src="logoPrincipal.png" /> 
+             src="img/logoPrincipal.png" /> 
           <span>Port Logistics - Transporte</span>
       </div>
-        <a href="pagDua1.html" class="ui-btn ui-icon-back ui-btn-icon-left">Atras</a>
+        <a href="pagTransporte.html" class="ui-btn ui-icon-back ui-btn-icon-left">Atras</a>
         <a href="#add-form" data-icon="gear" data-iconpos="notext">Add</a>
     </div><!-- /header -->
-
-
 
     <div role="main" class="ui-content" id="map-canvas">
         <!-- map loads here... -->
@@ -211,9 +29,9 @@ $( document ).on( "pagecreate", "#map-page", function() {
 
 <div data-role="panel" data-position="right" data-display="reveal" data-theme="b" id="add-form">
     <ul data-role="listview" data-theme="b">
-      <!--<li><a href="pagDua.html">DUA</a></li>-->
-      <li><a href="pagTransporte.html">Transporte</a></li>
-      <li><a href="pagAdicionales.html">Adicionales</a></li>
+      <li><a href="pagDua.html">DUA</a></li>
+      <!--<li><a href="pagTransporte.html">Transporte</a></li>-->
+      <li><a href="pagAdicional.html">Adicionales</a></li>
     </ul>
 </div><!-- /panel -->
 </div>
