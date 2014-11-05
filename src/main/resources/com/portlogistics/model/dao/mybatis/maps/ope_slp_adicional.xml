@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.portlogistics.model.dao.OpeSlpAdicionalMapper">
+
+    <resultMap id="listCabAdicionalResultMap" type="java.util.HashMap">
+        <result property="numSlp" column="numSlp"/>
+        <result property="tipoSlp" column="tipoSlp"/>
+        <result property="contenedores" column="contenedores"/>
+        <result property="ultEvento" column="ultEvento"/>
+    </resultMap>
+
+    <select id="listCabAdicional" resultMap="listCabAdicionalResultMap" parameterType="map">
+        select odd.NRO_SLP as numSlp, odd.TIPO_SLP as tipoSlp ,odd.TOT_CONTENEDORES as contenedores,
+        (select first 1 slt.DES_ADICIONAL from ope_slp_adicionales slt where odd.CODEMP = slt.CODEMP and
+        odd.ANIO = slt.ANIO and odd.NRO_SLP  = slt.NRO_SLP order by slt.FEC_ADICIONAL desc ) as ultEvento
+        from OPE_SLP odd
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="codEmp != null ">
+                    odd.CODEMP = #{codEmp}
+                </if>
+                <if test="anioSlp != null">
+                   AND odd.ANIO = #{anioSlp}
+                </if>
+                <if test="nroSlp != null">
+                   AND odd.NRO_SLP= #{nroSlp}
+                </if>
+            </trim>
+        </where>	
+    </select>	
+	
+    <resultMap id="listDetAdicionalResultMap" type="java.util.HashMap">
+        <result property="id" column="id"/>
+        <result property="fecha" column="fecha"/>
+        <result property="hora" column="hora"/>
+        <result property="observacion" column="observacion"/>
+		<result property="resumen" column="resumen"/>
+    </resultMap>
+
+    <select id="listDetAdicional" resultMap="listDetAdicionalResultMap" parameterType="map">
+		select 'codEmp='||CODEMP||'*codSlp='||ANIO||'_'||NRO_SLP||'*item='|| cast(ITEM as varchar(5)) as id,
+			extract(day from FEC_ADICIONAL)||'/'|| extract(month from FEC_ADICIONAL)||'/'|| extract(year from FEC_ADICIONAL) as fecha,
+			extract(hour from FEC_ADICIONAL)||':'||extract(minute from FEC_ADICIONAL) as hora,
+			DES_ADICIONAL as observacion,'Tipo: '||TIPO||', Detalle: '||DETALLE as resumen
+		from OPE_SLP_ADICIONALES
+        <where>
+            <trim prefixOverrides="AND" suffix=" ORDER BY FEC_ADICIONAL DESC ">
+                <if test="codEmp != null ">
+                    CODEMP = #{codEmp}
+                </if>
+                <if test="anioSlp != null">
+                   AND ANIO = #{anioSlp}
+                </if>
+                <if test="nroSlp != null">
+                   AND NRO_SLP= #{nroSlp}
+                </if>
+            </trim>
+        </where>
+    </select>
+	
+	<resultMap id="listDetCabAdicionalResulMap" type="java.util.HashMap">
+        <result property="fecha" column="fecha"/>
+        <result property="tipo" column="tipo"/>
+        <result property="desAdicional" column="desAdicional"/>
+        <result property="detalle" column="detalle"/>
+    </resultMap>
+
+    <select id="listDetCabAdicional" resultMap="listDetCabAdicionalResulMap" parameterType="map">
+        select extract(day from od.FEC_ADICIONAL)||'-'|| extract(month from od.FEC_ADICIONAL)||'-'|| extract(year from od.FEC_ADICIONAL)||' '||
+        extract(hour from od.FEC_ADICIONAL)||':'||extract(minute from od.FEC_ADICIONAL) as fecha , od.tipo as tipo,
+        od.des_Adicional as desAdicional, od.detalle as detalle
+        from OPE_SLP_ADICIONALES od
+        <where>
+            <trim prefixOverrides="AND" suffix=" order by FEC_ADICIONAL desc ">
+                <if test="codEmp != null  ">
+                    od.CODEMP = #{codEmp}
+                </if>
+                <if test="anioSlp != null">
+                   AND od.ANIO = #{anioSlp}
+                </if>
+                <if test="nroSlp != null">
+                   AND od.NRO_SLP= #{nroSlp}
+                </if>
+				<if test="item != null">
+                   AND od.item= #{item}
+                </if>
+            </trim>
+        </where>
+    </select>	
+</mapper>

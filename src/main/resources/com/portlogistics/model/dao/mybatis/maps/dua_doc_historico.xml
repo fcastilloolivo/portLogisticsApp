@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.portlogistics.model.dao.DuaDocHistoricoMapper">
+
+    <resultMap id="cabDuaDocHistoricoResultMap" type="java.util.HashMap">
+        <result property="nomDua" column="nomDua"/>
+        <result property="estado" column="estado"/>
+        <result property="canal" column="canal"/>
+        <result property="ultEvento" column="ultimo_evento"/>
+    </resultMap>
+
+
+    <select id="listCabDuaDocHistorico" resultMap="cabDuaDocHistoricoResultMap" parameterType="map">
+        select od.ANIO_DUA||'-'||od.COD_ADUANA||'-'||od.COD_REGIMEN||'-'||od.NUM_DUA as nomDua, od.ESTADO , od.canal,
+        ( select first 1 odd.OBSERVACION
+          from ope_dua_documentos_historial odd
+          where odd.CODEMP = od.CODEMP  and
+          odd.ANIO_DUA = od.ANIO_DUA  and
+          odd.COD_ADUANA  = od.COD_ADUANA   and
+          odd.COD_REGIMEN = od.COD_REGIMEN  and
+          odd.NUM_DUA = od.NUM_DUA  order by FEC_ACTIVIDAD ) as ultimo_evento
+        from ope_dua od
+        <where>
+            <if test="codEmp != null  ">
+                od.CODEMP = #{codEmp}
+            </if>
+            <if test="anioDua != null ">
+                    AND od.ANIO_DUA  = #{anioDua}
+            </if>
+            <if test="codAduana != null ">
+                    AND od.COD_ADUANA = #{codAduana}
+            </if>
+            <if test="codRegimen != null ">
+                    AND od.COD_REGIMEN = #{codRegimen}
+            </if>
+            <if test="numDua != null ">
+                    AND od.NUM_DUA = #{numDua}
+            </if>
+        </where>
+    </select>
+
+    <resultMap id="detDuaDocHistoricoResulMap" type="java.util.HashMap">
+        <result property="id" column="id"/>
+        <result property="fecha" column="fecha"/>
+        <result property="hora" column="hora"/>
+        <result property="observacion" column="observacion"/>
+        <result property="resumen" column="resumen"/>
+    </resultMap>
+
+    <select id="listDetDuaDocHistorico" resultMap="detDuaDocHistoricoResulMap" parameterType="map">
+        select 'codEmp='||od.codemp||'*codDua='||od.anio_dua||'_'||od.cod_aduana||'_'||od.cod_regimen||'_'||od.num_dua||'*item='|| cast(odh.item as varchar(5)) as id,
+        extract(day from odh.fecreg)||'/'|| extract(month from odh.fecreg)||'/'|| extract(year from odh.fecreg) as fecha,
+        extract(hour from odh.fecreg)||':'||extract(minute from odh.fecreg) as hora,
+        odh.observacion, 'Solicitado: '||odh.solicitado||', Accion: '||odh.accion as resumen
+        from ope_dua_documentos_historial odh  join ope_dua od on
+        (       odh.codemp = od.codemp
+        and odh.anio_dua = od.anio_dua
+        and odh.cod_aduana = od.cod_aduana
+        and odh.cod_regimen = od.cod_regimen
+        and odh.num_dua = od.num_dua )
+        <where>
+            <trim prefixOverrides="AND" suffix=" order by FEC_ACTIVIDAD desc ">
+                <if test="codEmp != null  ">
+                    od.CODEMP = #{codEmp}
+                </if>
+                <if test="anioDua != null ">
+                    AND od.ANIO_DUA  = #{anioDua}
+                </if>
+                <if test="codAduana != null ">
+                    AND od.COD_ADUANA = #{codAduana}
+                </if>
+                <if test="codRegimen != null ">
+                    AND od.COD_REGIMEN = #{codRegimen}
+                </if>
+                <if test="numDua != null ">
+                    AND od.NUM_DUA = #{numDua}
+                </if>
+            </trim>
+        </where>
+    </select>
+
+
+    <resultMap id="detCabHistoricoResulMap" type="java.util.HashMap">
+        <result property="fecha" column="fecha"/>
+        <result property="observacion" column="observacion"/>
+        <result property="documento" column="documento"/>
+        <result property="solicitado" column="solicitado"/>
+        <result property="accion" column="accion"/>
+    </resultMap>
+
+    <select id="listCabDetDocHistorico" resultMap="detCabHistoricoResulMap" parameterType="map">
+        select extract(day from od.fecreg)||'-'|| extract(month from od.fecreg)||'-'|| extract(year from od.fecreg)||' '||
+        extract(hour from od.fecreg)||':'||extract(minute from od.fecreg) as fecha , od.observacion,
+        od.documento, od.solicitado, od.accion
+        from ope_dua_documentos_historial od
+        <where>
+            <trim prefixOverrides="AND" suffix=" order by FEC_ACTIVIDAD desc ">
+                <if test="codEmp != null  ">
+                    od.CODEMP = #{codEmp}
+                </if>
+                <if test="anioDua != null ">
+                    AND od.ANIO_DUA  = #{anioDua}
+                </if>
+                <if test="codAduana != null ">
+                    AND od.COD_ADUANA = #{codAduana}
+                </if>
+                <if test="codRegimen != null ">
+                    AND od.COD_REGIMEN = #{codRegimen}
+                </if>
+                <if test="numDua != null ">
+                    AND od.NUM_DUA = #{numDua}
+                </if>
+                <if test="item != null ">
+                    AND od.ITEM = #{item}
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <resultMap id="listArchivosDuaResulMap" type="java.util.HashMap">
+        <result property="ruta" column="ruta"/>
+        <result property="archivo" column="archivo"/>
+    </resultMap>
+
+    <select id="listArchivosDua" resultMap="listArchivosDuaResulMap" parameterType="map">
+        select ruta, archivo
+        from ope_dua_documentos_attach od
+        <where>
+            <trim prefixOverrides="AND" suffix=" order by FECREG desc ">
+                <if test="codEmp != null  ">
+                    od.CODEMP = #{codEmp}
+                </if>
+                <if test="anioDua != null ">
+                    AND od.ANIO_DUA  = #{anioDua}
+                </if>
+                <if test="codAduana != null ">
+                    AND od.COD_ADUANA = #{codAduana}
+                </if>
+                <if test="codRegimen != null ">
+                    AND od.COD_REGIMEN = #{codRegimen}
+                </if>
+                <if test="numDua != null ">
+                    AND od.NUM_DUA = #{numDua}
+                </if>
+                <if test="item != null ">
+                    AND od.ITEM = #{item}
+                </if>
+            </trim>
+        </where>
+    </select>
+</mapper>

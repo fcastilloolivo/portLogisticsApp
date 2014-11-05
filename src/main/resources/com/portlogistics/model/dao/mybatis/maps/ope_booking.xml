@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.portlogistics.model.dao.OpeBookingMapper">
+
+    <resultMap id="opeBookingResultMap" type="java.util.HashMap">
+        <result property="id" column="id"/>
+        <result property="descrip" column="descrip"/>
+        <!--<result property="numBooking" column="nro_booking"/>-->
+        <!--<result property="numDua" column="num_dua"/>-->
+        <!--<result property="codAduana" column="cod_aduana"/>-->
+        <!--<result property="codRegimen" column="cod_regimen"/>-->
+    </resultMap>
+
+
+    <select id="listBookingDua" resultMap="opeBookingResultMap" parameterType="map">
+
+        <if test="pagina == '01' ">
+            select  'codEmp='||ob.codemp||'*codSlp='||od.anio_slp||'_'||od.nro_slp||
+            '*codDua='||od.num_dua||'_'||od.cod_aduana||'_'||od.cod_regimen||'_'||od.anio_dua as id ,
+            'Book '|| ob.nro_booking ||' | Dua ('||od.num_dua||'-'||od.cod_aduana||'-'||od.cod_regimen||')' as descrip
+        </if>
+        <if test="pagina == '02' ">
+            select 'codEmp='||ob.codemp||'*codSlp='||od.anio_slp||'_'||od.nro_slp as id ,
+            'Book '|| ob.nro_booking ||' | SLP '||od.nro_slp as descrip
+        </if>
+
+        from    ope_booking ob join ope_dua od
+                on (ob.codemp = od.codemp and ob.anio = od.anio_booking and
+                ob.item = od.item_booking )
+        <where>
+            <trim prefix="(" prefixOverrides="OR" suffix=")">
+                <if test="numBooking != null">
+                    (ob.nro_booking like '%'||#{numBooking}||'%')
+                </if>
+                <if test="numDua != null">
+                    or (od.num_dua like '%'||#{numDua}||'%')
+                </if>
+                <if test="numSlp != null">
+                    or (od.nro_slp like '%'||#{numSlp}||'%')
+                </if>
+            </trim>
+            <trim prefix="AND (" prefixOverrides=" " suffix=")">
+                <if test="numDoce != null">
+                    ((current_date - od.fec_apertura_slp)/30 <![CDATA[ < ]]> #{numDoce})
+                </if>
+                <if test="numSeis != null">
+                    ((current_date - od.fec_apertura_slp)/30 <![CDATA[ < ]]> #{numSeis})
+                </if>
+                <if test="numTres != null">
+                    ((current_date - od.fec_apertura_slp)/30 <![CDATA[ < ]]> #{numTres})
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <resultMap id="listDuabySlpResultMap" type="java.util.HashMap">
+        <result property="id" column="id"/>
+        <result property="descrip" column="descrip"/>
+    </resultMap>
+
+    <select id="listDuabySlp" resultMap="listDuabySlpResultMap" parameterType="map">
+        select  'codEmp='||ob.codemp||'*codSlp='||od.anio_slp||'_'||od.nro_slp||
+            '*codDua='||od.num_dua||'_'||od.cod_aduana||'_'||od.cod_regimen||'_'||od.anio_dua as id ,
+            'Book '|| ob.nro_booking ||' | Dua ('||od.num_dua||'-'||od.cod_aduana||'-'||od.cod_regimen||')' as descrip
+        from  ope_booking ob join ope_dua od
+                on (ob.codemp = od.codemp and ob.anio = od.anio_booking and
+                ob.item = od.item_booking)
+        <where>
+            <trim prefixOverrides="AND">
+                <if test="codEmp != null ">
+                    od.CODEMP = #{codEmp}
+                </if>
+                <if test="anioSlp != null">
+                   AND od.anio_slp = #{anioSlp}
+                </if>
+                <if test="nroSlp != null">
+                   AND od.NRO_SLP= #{nroSlp}
+                </if>
+            </trim>
+        </where>
+    </select>	
+	
+	<resultMap id="getUsuarioClienteMap" type="java.util.HashMap">
+    <result property="codCliente" column="codCliente"/>
+    <result property="nomCliente" column="nomCliente"/>
+	<result property="logoCliente" column="logoCliente"/>
+    </resultMap>
+
+    <select id="getUsuarioCliente" resultMap="getUsuarioClienteMap" parameterType="map">
+        select  RUC as codCliente, razon_social as nomCliente, RUTA_LOGO as logoCliente
+        from Clientes
+        <where>
+            <trim prefixOverrides="AND" >
+                <if test="codEmp != null ">
+                    CODEMP = #{codEmp}
+                </if>
+                <if test="usuario != null">
+                   AND USUARIO = #{usuario}
+                </if>
+                <if test="clave != null">
+                   AND CLAVE= #{clave}
+                </if>
+            </trim>
+        </where>
+    </select>	
+	
+</mapper>

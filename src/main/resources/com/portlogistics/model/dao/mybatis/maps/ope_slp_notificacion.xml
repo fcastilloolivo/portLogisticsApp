@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.portlogistics.model.dao.OpeSlpNotificacionMapper">
+
+    <resultMap id="opeSlpNotificacionResultMap" type="java.util.HashMap">
+        <result property="cabecera" column="cabecera"/>
+        <result property="fecha" column="fec_notificacion"/>
+        <result property="resumen" column="resumen"/>
+        <result property="descripcion" column="descripcion"/>
+        <result property="rutaImagen" column="ruta_imagen"/>
+    </resultMap>
+
+
+    <select id="listSlpNotificacion" resultMap="opeSlpNotificacionResultMap" parameterType="map">
+        SELECT extract(day from fec_notificacion)||'/'|| extract(month from fec_notificacion)||'/'|| extract(year from fec_notificacion)||' '||
+        extract(hour from fec_notificacion)||':'||extract(minute from fec_notificacion) as fec_notificacion,cabecera,
+        resumen,descripcion,snvl(ruta_imagen,'') as ruta_imagen
+        FROM ope_slp_notificaciones
+        <where>
+            <trim prefixOverrides="AND" suffix=" ORDER BY fec_notificacion DESC ">
+                <if test="codEmp != null ">
+                    codemp = #{codEmp}
+                </if>
+                <if test="codApp != null">
+                    AND cod_app = #{codApp}
+                </if>
+                <if test="codCliente != null">
+                    AND cod_cliente = #{codCliente}
+                </if>
+            </trim>
+        </where>
+
+    </select>
+</mapper>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.portlogistics.model.dao.OpeSlpTransporteMapper">
+
+    <resultMap id="listCabTransporteResultMap" type="java.util.HashMap">
+        <result property="numSlp" column="numSlp"/>
+        <result property="tipoSlp" column="fec_notificacion"/>
+        <result property="contenedores" column="contenedores"/>
+        <result property="ultEvento" column="ultEvento"/>
+    </resultMap>
+
+    <select id="listCabTransporte" resultMap="listCabTransporteResultMap" parameterType="map">
+		select odd.NRO_SLP as numSlp, odd.TIPO_SLP as tipoSlp ,odd.TOT_CONTENEDORES as contenedores,
+		(select first 1 slt.OBSERVACIONES from OPE_SLP_TRANSPORTE_MONITOR slt
+		 where odd.CODEMP = slt.CODEMP and odd.ANIO = slt.ANIO and
+		 odd.NRO_SLP  = slt.NRO_SLP	order by slt.FEC_MONITOREO desc ) as ultEvento
+		from OPE_SLP odd	
+        <where>
+            <trim prefixOverrides="AND" >
+                <if test="codEmp != null ">
+                    odd.CODEMP = #{codEmp}
+                </if>
+                <if test="anioSlp != null">
+                   AND odd.ANIO = #{anioSlp}
+                </if>
+                <if test="nroSlp != null">
+                   AND odd.NRO_SLP= #{nroSlp}
+                </if>
+            </trim>
+        </where>	
+    </select>
+	
+    <resultMap id="listDetTransporteResultMap" type="java.util.HashMap">
+        <result property="id" column="id"/>
+        <result property="fecha" column="fecha"/>
+        <result property="hora" column="hora"/>
+        <result property="observacion" column="observacion"/>
+		<result property="resumen" column="resumen"/>
+    </resultMap>
+
+    <select id="listDetTransporte" resultMap="listDetTransporteResultMap" parameterType="map">
+		select 'codEmp='||CODEMP||'*codSlp='||ANIO||'_'||NRO_SLP||'*item='|| cast(ITEM as varchar(5)) as id,
+			extract(day from FEC_MONITOREO)||'/'|| extract(month from FEC_MONITOREO)||'/'|| extract(year from FEC_MONITOREO) as fecha,
+			extract(hour from FEC_MONITOREO)||':'||extract(minute from FEC_MONITOREO) as hora,
+			OBSERVACIONES as observacion,'Estado: '||ESTADO||', Nro Contenedor(es): '||NRO_CONTENEDOR as resumen
+		from OPE_SLP_TRANSPORTE_MONITOR	
+        <where>
+            <trim prefixOverrides="AND" suffix=" ORDER BY FEC_MONITOREO DESC ">
+                <if test="codEmp != null ">
+                    CODEMP = #{codEmp}
+                </if>
+                <if test="anioSlp != null">
+                   AND ANIO = #{anioSlp}
+                </if>
+                <if test="nroSlp != null">
+                   AND NRO_SLP= #{nroSlp}
+                </if>
+            </trim>
+        </where>	
+    </select>	
+</mapper>

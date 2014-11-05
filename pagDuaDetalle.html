@@ -32,9 +32,9 @@
         <table data-role="table" id="table-custom-2"  class="movie-list">
           <thead>
             <tr class="ui-bar-d">
-              <th value = "OPE_DUA_DOCUMENTOS_HISTORIAL.DOCUMENTO">Documento</th>
-              <th value = "OPE_DUA_DOCUMENTOS_HISTORIAL.SOLICITADO">Solicitado</th>
-              <th value = "OPE_DUA_DOCUMENTOS_HISTORIAL.ACCION">Accion</th>
+              <th data-colstart="1" >Documento</th>
+              <th data-colstart="2" >Solicitado</th>
+              <th data-colstart="3" >Accion</th>
             </tr>
           </thead>
           <tbody id="lstCabDetalleDua">
@@ -48,11 +48,11 @@
       </div>
     </div>
     <br>
-    <div class="ui-corner-all ui-shadow custom-corners" >
+    <div class="ui-corner-all ui-shadow custom-corners">
       <div class="ui-bar ui-bar-b">Archivos Adjuntos</div>
       <div class="ui-body ui-body-a">
         <ul data-role="listview" data-split-icon="arrow-d" data-split-theme="a" data-inset="true" id="lstArchivosDua">
-          <!--<li><a href="#"><img src="img/word.png">
+         <!-- <li><a href="#"><img src="img/word.png">
           <h2 value = "OPE_DUA_DOCUMENTOS_ATTACH.ARCHIVO">Documento 1</h2>
               <a href="#purchase" data-rel="popup" data-position-to="window" data-transition="pop">Descargar</a>
           </li>
