@@ -170,7 +170,14 @@
 
     localStorage.codEmp = "08";
     localStorage.codApp = "001";
-    localStorage.ip = "http://192.168.2.152:8080/data/";
+    localStorage.ip = "http://localhost:8080/data/";
+
+    $(document).ajaxSend(function() {
+        $.mobile.loading( 'show');
+    });
+    $(document).ajaxComplete(function() {
+        $.mobile.loading( 'hide');
+    });
 
     $( document ).on( "pagecreate", "#pagLogin", function(){
 
@@ -180,17 +187,20 @@
         } 
     }
 
-    $('#formulario').submit(function() {         
+    $(document).ready(function() {
+    $("input[type=submit]").click(function(e) {
+
         // recolecta los valores que inserto el usuario
         var datosUsuario = $("#nomUsuario").val();
         var datosPassword = $("#clave").val();    
         if (datosUsuario.length == 0 || datosPassword.length==0) {
-            $('#popupErrorLogin').popup();
-            $('#popupErrorLogin').popup("open");
-            return true;
+            $('#errorLogin').popup();
+            $('#errorLogin').popup("open");
         } else {
             jQuery.support.cors = true;
             $.ajax({
+                //beforeSend: function() { $.mobile.showPageLoadingMsg(); }, //Show spinner
+                //complete: function() { $.mobile.hidePageLoadingMsg() }, //Hide spinner
                 type : 'GET',
                 url: localStorage.ip+"autenticaPLX",
                 dataType: "json",
@@ -198,9 +208,10 @@
                 data: {codEmp: localStorage.codEmp, usuario : $("#nomUsuario").val(), clave : $("#clave").val()},
                 success : function(datos) { 
                     if (!datos.success) {
-                        $('#popupErrorLogin').popup();
-                        $('#popupErrorLogin').popup("open");
-                        return;
+                        $('#errorLogin').popup();
+                        $('#errorLogin').popup("open");
+                        //e.preventDefault();
+                        //return;
                     } else {                    
                         localStorage.codCliente = datos.datosUsuario.codCliente;
                         localStorage.nomCliente = datos.datosUsuario.nomCliente;
@@ -209,10 +220,14 @@
                     }
                 },
                error : function(xhr, type) { 
-                // alert('Internal Error Occoured!'); 
+                    $('#errorNetwork').popup();
+                    $('#errorNetwork').popup("open");
+                    //e.preventDefault();
                } 
             });   
         }
+    return false;
+    });
     });
     });
 
@@ -512,19 +527,27 @@
     
     <div data-role="content">   
         <h3>Bienvenido a Port Logistics App</h3>
-        <form id="formulario" >      
+        <form method="post" action="#Home" data-ajax="true">      
             <label> Usuario </label>
             <input type="text" id="nomUsuario" name="nomUsuario">      
-            <label> Password </label>
+            <label> Contraseña </label>
             <input type="password" id="clave" name="clave" > 
             <input type="submit" value="Inicie Sesion" id="botonLogin">      
         </form> 
     </div>     
 
-    <div data-role="popup" id="popupErrorLogin" data-dismissible="false" style="max-width:400px;">
+    <div data-role="popup" id="errorLogin" data-dismissible="false" style="max-width:400px;">
         <div role="main" class="ui-content">
         <h3 class="mc-text-danger">Error de Autenticación</h3>
         <p>Ingreso los datos correctos?</p>
+        <div class="mc-text-center"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a mc-top-margin-1-5">OK</a></div>
+        </div>
+    </div>
+
+    <div data-role="popup" id="errorNetwork" data-dismissible="false" style="max-width:400px;">
+        <div role="main" class="ui-content">
+        <h3 class="mc-text-danger">Error de Conexion</h3>
+        <p>Revise su conexion a internet</p>
         <div class="mc-text-center"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a mc-top-margin-1-5">OK</a></div>
         </div>
     </div>
